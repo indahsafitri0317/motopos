@@ -19,7 +19,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
           cache: 'npm'
 
       # Langkah 3: Setup Java JDK (Wajib untuk kompilasi Android/Gradle)
@@ -27,7 +27,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version: '17'
+          java-version: '21'
 
       # Langkah 4: Setup Android SDK Tools
       - name: Setup Android SDK
@@ -41,7 +41,7 @@ jobs:
       # --- Jika Menggunakan Capacitor ---
       - name: Sync Capacitor & Build APK
         run: |
-          npx cap sync android || true
+          npx cap sync android
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug
