@@ -1,0 +1,6 @@
+{
+  "name": "MotoPOS - POS & CRM Bengkel Motor",
+  "description": "Aplikasi Kasir POS & CRM Toko Oli dan Sparepart Motor dengan manajemen stok, pengingat servis otomatis, dan laporan laba rugi berbasis SQLite.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
