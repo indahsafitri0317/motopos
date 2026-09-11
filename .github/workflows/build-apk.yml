@@ -1,0 +1,54 @@
+name: Build Android APK
+
+on:
+  push:
+    branches:
+      - main # Jalankan otomatis setiap ada push ke branch main
+  workflow_dispatch: # Memungkinkan tombol "Run workflow" manual di GitHub Actions
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Langkah 1: Checkout/Ambil kode dari repository GitHub
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Langkah 2: Setup Node.js (V8 / LTS)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      # Langkah 3: Setup Java JDK (Wajib untuk kompilasi Android/Gradle)
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      # Langkah 4: Setup Android SDK Tools
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      # Langkah 5: Install Dependensi Project (NPM)
+      - name: Install Project Dependencies
+        run: npm ci || npm install
+
+      # Langkah 6: Kompilasi & Sync Project Android (Capacitor / Cordova)
+      # --- Jika Menggunakan Capacitor ---
+      - name: Sync Capacitor & Build APK
+        run: |
+          npx cap sync android || true
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      # Langkah 7: Simpan Hasil APK ke Artifact GitHub
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: motopos-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
